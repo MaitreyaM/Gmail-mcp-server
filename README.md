@@ -37,31 +37,32 @@ The server is built with resilience in mind, featuring an increased timeout and 
    cd gmail-mcp-server
 
 
-2. Set Up Environment Variables:
+Set Up Environment Variables:
 
-Create a .env file in the root directory and add your Gmail SMTP credentials:
+Create a `.env` file in the root directory and add your Gmail SMTP credentials:
 
-dotenv
-Copy
-SMTP_USERNAME=your.email@gmail.com
+SMTP_USERNAME=your.email@gmail.com 
 SMTP_PASSWORD=your_app_password
+
+
 Note: If you use 2-Step Verification on your Gmail account, you must generate and use an App Password.
 
 (Optional) Prepare Attachment Directories:
 
-For pre-staged attachments, create a directory named available_attachments in the root.
-The server will automatically create a temp_attachments directory when downloading files from URLs.
-Running the Server
+For pre-staged attachments, create a directory named `available_attachments` in the root.
+The server will automatically create a `temp_attachments` directory when downloading files from URLs.
+
+Running the Server:
 To start the MCP server, run:
 
-bash
-Copy
+```bash
 python server.py
+
 The server will start on 127.0.0.1:5000 and can be accessed by your MCP clients or agents.
 
-
-3. Usage
+Usage
 Sending Emails
+
 You can send emails using the send_email_tool with the following parameters:
 
 recipient: Email address of the recipient.
@@ -82,6 +83,7 @@ Copy
   "body": "Please see the attached document.",
   "attachment_path": "C:\\path\\to\\document.pdf"
 }
+
 URL-Based Attachment:
 
 json
@@ -105,13 +107,12 @@ Copy
   "body": "Please see the attached file.",
   "attachment_name": "document.pdf"
 }
-License
+License:
 This project is licensed under the MIT License.
 
-Contributing
+Contributing:
 Contributions are welcome! Feel free to open issues or submit pull requests.
 
-Acknowledgments
+Acknowledgments:
 Built with fastMCP.
 Inspired by resilient design patterns for server applications.
-
