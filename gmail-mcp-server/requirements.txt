@@ -1,0 +1,5 @@
+fastmcp
+python-dotenv
+httpx
+beautifulsoup4
+brave-search-python-client
