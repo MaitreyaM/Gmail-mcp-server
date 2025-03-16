@@ -36,6 +36,7 @@ The server is built with resilience in mind, featuring an increased timeout and 
    git clone <remote-repository-URL>
    cd gmail-mcp-server
 
+
 2. Set Up Environment Variables:
 
 Create a .env file in the root directory and add your Gmail SMTP credentials:
@@ -57,6 +58,7 @@ bash
 Copy
 python server.py
 The server will start on 127.0.0.1:5000 and can be accessed by your MCP clients or agents.
+
 
 3. Usage
 Sending Emails
