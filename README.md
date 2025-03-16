@@ -74,6 +74,14 @@ python server.py
 
 The server will start on 127.0.0.1:5000 and can be accessed by your MCP clients or agents.
 
+### Installing via Smithery
+
+To install Gmail MCP Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@MaitreyaM/gmail-mcp-server):
+
+```bash
+npx -y @smithery/cli install @MaitreyaM/gmail-mcp-server --client claude
+```
+
 Usage
 Sending Emails
 
