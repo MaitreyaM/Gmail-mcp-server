@@ -1,0 +1,24 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - SMTP_USERNAME
+      - SMTP_PASSWORD
+    properties:
+      SMTP_USERNAME:
+        type: string
+        description: Your Gmail username
+      SMTP_PASSWORD:
+        type: string
+        description: Your Gmail App password
+  commandFunction:
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => ({ command: 'python', args: ['gmail-mcp-server/gmail_mcp.py'], env: { SMTP_USERNAME: config.SMTP_USERNAME, SMTP_PASSWORD: config.SMTP_PASSWORD } })
+  exampleConfig:
+    SMTP_USERNAME: example@gmail.com
+    SMTP_PASSWORD: example_app_password
