@@ -13,7 +13,7 @@ The server is built with resilience in mind, featuring an increased timeout and 
 
 ## Features
 
-- **Gmail SMTP Integration:** Sends emails using Gmail’s SMTP server with TLS.
+- **Gmail SMTP Integration:** Sends emails using Gmail’s SMTP server with TLS. ( MAKE SURE YOU HAVE SETUP GMAIL SMTP ON YOUR ACCOUNT AND GENERATE APP password )
 - **Multiple Attachment Methods:** 
   - Directly from a file path.
   - By downloading from a public URL.
