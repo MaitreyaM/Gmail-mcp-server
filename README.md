@@ -47,6 +47,19 @@ SMTP_PASSWORD=your_app_password
 
 Note: If you use 2-Step Verification on your Gmail account, you must generate and use an App Password.
 
+OPEN CLAUDE > SETTINGS > MCP > Configure > OPEN claude_desktop_config.json > Paste the file with your path below
+{
+  "mcpServers": {
+    "gmail-mcp": {
+      "command": "python",
+      "args": ["PATH_TO_gmail_mcp.py"],
+      "host": "127.0.0.1",
+      "port": 5000,
+      "timeout": 30000
+    }
+  }
+}
+
 (Optional) Prepare Attachment Directories:
 
 For pre-staged attachments, create a directory named `available_attachments` in the root.
