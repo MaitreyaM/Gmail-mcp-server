@@ -11,7 +11,7 @@ from email.mime.base import MIMEBase
 from email import encoders
 from dotenv import load_dotenv
 
-# Load environment variables
+
 load_dotenv()
 
 # Gmail SMTP Configuration
@@ -26,7 +26,7 @@ def signal_handler(sig, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-# Create an MCP server with increased timeout (30 seconds)
+
 mcp = FastMCP(
     name="gmail-mcp",
     host="127.0.0.1",
