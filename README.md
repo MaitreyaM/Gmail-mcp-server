@@ -1,140 +1,86 @@
-# Gmail-mcp-server
-A resilient MCP server built with fastMCP for sending emails through Gmail's SMTP server using AI agents.
-[![smithery badge](https://smithery.ai/badge/@MaitreyaM/gmail-mcp-server)](https://smithery.ai/server/@MaitreyaM/gmail-mcp-server)
-
 # Gmail MCP Server
 
-This repository contains a resilient MCP server implementation using [fastMCP](https://github.com/your-link-to-fastMCP). The server is designed to send emails via Gmail's SMTP server and supports various methods for attaching files, including:
-
-- **Direct File Path:** Attach files that exist on the local filesystem.
-- **URL-Based Attachments:** Download files from a given URL and attach them.
-- **Pre-Staged Attachments:** Use attachments stored in a designated directory.
-
-The server is built with resilience in mind, featuring an increased timeout and graceful shutdown handling.
+A Model Context Protocol (MCP) server for Gmail operations, deployed on Smithery.ai using Streamable HTTP transport.
 
 ## Features
 
-- **Gmail SMTP Integration:** Sends emails using Gmail’s SMTP server with TLS. ( MAKE SURE YOU HAVE SETUP GMAIL SMTP ON YOUR ACCOUNT AND GENERATE APP password )
-- **Multiple Attachment Methods:** 
-  - Directly from a file path.
-  - By downloading from a public URL.
-  - Using pre-staged attachments stored locally.
-- **Resilient Design:** Increased timeout and signal handling for graceful shutdown.
-- **Environment-Based Configuration:** Securely manage your Gmail credentials using environment variables.
+- Send emails via Gmail SMTP
+- Fetch recent emails from Gmail folders
+- Handle email attachments
+- Health check endpoint for deployment monitoring
 
-## Requirements
+## Deployment on Smithery.ai
 
-- Python 3.x
-- [fastMCP](https://pypi.org/project/mcp/) (install via `pip install mcp`)
-- [python-dotenv](https://pypi.org/project/python-dotenv/) (install via `pip install python-dotenv`)
-- [requests](https://pypi.org/project/requests/) (install via `pip install requests`)
+This server is configured for deployment on Smithery.ai using Streamable HTTP transport.
 
-## Setup
+### Configuration
 
-1. **Clone the Repository:**
+The server requires the following configuration parameters:
+- `smtp_username`: Your Gmail email address
+- `smtp_password`: Your Gmail app password (not your regular password)
 
-   ```bash
-   git clone <remote-repository-URL>
-   cd gmail-mcp-server
+### Health Check
+
+The server provides a health check endpoint at `/health` for Smithery deployment monitoring.
 
 
-Set Up Environment Variables:
-
-Create a `.env` file in the root directory and add your Gmail SMTP credentials:
-
-SMTP_USERNAME=your.email@gmail.com 
-SMTP_PASSWORD=your_app_password
-
-
-Note: If you use 2-Step Verification on your Gmail account, you must generate and use an App Password.
-
-OPEN CLAUDE > SETTINGS > MCP > Configure > OPEN claude_desktop_config.json > Paste the file with your path below
+## CLAUDE CONFIG EXAMPLE 
+```
 {
   "mcpServers": {
-    "gmail-mcp": {
-      "command": "python",
-      "args": ["PATH_TO_gmail_mcp.py"],
-      "host": "127.0.0.1",
-      "port": 5000,
-      "timeout": 30000
+    "terminal_server": {
+      "command": "/Users/maitreyamishra/.local/bin/uv",
+      "args": [
+        "--directory", "Path to your mcp server file",
+        "run",
+        "terminal_server.py"
+      ]
+    },
+    "web3_server": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "http://localhost:3000/mcp"
+      ]
+    },
+    "gmail_mcp": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "http://localhost:8989/mcp"
+      ]
     }
   }
 }
-
-(Optional) Prepare Attachment Directories:
-
-For pre-staged attachments, create a directory named `available_attachments` in the root.
-The server will automatically create a `temp_attachments` directory when downloading files from URLs.
-
-Running the Server:
-To start the MCP server, run:
-
-```bash
-python server.py
-
-The server will start on 127.0.0.1:5000 and can be accessed by your MCP clients or agents.
-
-### Installing via Smithery
-
-To install Gmail MCP Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@MaitreyaM/gmail-mcp-server):
-
-```bash
-npx -y @smithery/cli install @MaitreyaM/gmail-mcp-server --client claude
 ```
 
-Usage
-Sending Emails
 
-You can send emails using the send_email_tool with the following parameters:
+### Port
 
-recipient: Email address of the recipient.
-subject: Email subject.
-body: Email body text.
-attachment_path (optional): Direct file path to the attachment.
-attachment_url (optional): Public URL from which to download the attachment.
-attachment_name (optional): Filename to use for the attachment (required when using URL-based or pre-staged attachments).
-Example Scenarios:
+The server runs on port 5000 and binds to all interfaces (0.0.0.0) for container deployment.
 
-Direct File Attachment:
+## Local Development
 
-json
-Copy
-{
-  "recipient": "friend@example.com",
-  "subject": "Hello with attachment",
-  "body": "Please see the attached document.",
-  "attachment_path": "C:\\path\\to\\document.pdf"
-}
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-URL-Based Attachment:
+2. Set environment variables:
+   ```bash
+   export SMTP_USERNAME="your-email@gmail.com"
+   export SMTP_PASSWORD="your-app-password"
+   ```
 
-json
-Copy
-{
-  "recipient": "friend@example.com",
-  "subject": "Hello with attachment",
-  "body": "Please see the attached image.",
-  "attachment_url": "https://example.com/image.png",
-  "attachment_name": "image.png"
-}
-Pre-Staged Attachment:
+3. Run the server:
+   ```bash
+   python gmail_mcp.py
+   ```
 
-Place your file in the available_attachments directory and reference it by name:
+## Docker
 
-json
-Copy
-{
-  "recipient": "friend@example.com",
-  "subject": "Hello with attachment",
-  "body": "Please see the attached file.",
-  "attachment_name": "document.pdf"
-}
-License:
-This project is licensed under the MIT License.
-
-Contributing:
-Contributions are welcome! Feel free to open issues or submit pull requests.
-
-Acknowledgments:
-Built with fastMCP.
-Inspired by resilient design patterns for server applications.
+Build and run with Docker:
+```bash
+docker build -t gmail-mcp .
+docker run -p 5000:5000 -e SMTP_USERNAME=your-email -e SMTP_PASSWORD=your-password gmail-mcp
+```
