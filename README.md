@@ -1,6 +1,7 @@
-# Gmail MCP Server
 
-A Model Context Protocol (MCP) server for Gmail operations, deployed on Smithery.ai using Streamable HTTP transport.
+# Gmail-mcp-server
+A resilient MCP server built with fastMCP for sending emails through Gmail's SMTP server using AI agents.
+[![smithery badge](https://smithery.ai/badge/@MaitreyaM/gmail-mcp-server)](https://smithery.ai/server/@MaitreyaM/gmail-mcp-server)
 
 ## Features
 
