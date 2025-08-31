@@ -13,10 +13,22 @@ from dotenv import load_dotenv
 import imaplib
 import email
 from email.header import decode_header
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 
 load_dotenv()
 
-SMTP_HOST = "smtp.gmail.com"
+app = FastAPI()
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for Smithery deployment"""
+    return JSONResponse(
+        status_code=200,
+        content={"status": "healthy", "service": "gmail-mcp"}
+    )
+
+SMTP_HOST = "smtp.gmail.com"    
 SMTP_PORT = 587
 SMTP_USERNAME = os.getenv("SMTP_USERNAME")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
@@ -28,9 +40,9 @@ signal.signal(signal.SIGINT, signal_handler)
 
 mcp = FastMCP(
     name="gmail-mcp",
-    host="127.0.0.1",
-    port=5000,
-    timeout=30
+    host="0.0.0.0",     
+    port=8989,       
+
 )
 
 def send_email(recipient: str, subject: str, body: str, attachment_path: str = None) -> str:
@@ -98,7 +110,7 @@ def get_pre_staged_attachment(attachment_name: str) -> str:
     file_path = os.path.join(attachment_dir, attachment_name)
     return file_path if os.path.exists(file_path) else None
 
-@mcp.tool()
+@mcp.tool('send_email_tool')
 def send_email_tool(recipient: str, subject: str, body: str, 
                     attachment_path: str = None, 
                     attachment_url: str = None, 
@@ -131,7 +143,7 @@ def send_email_tool(recipient: str, subject: str, body: str,
             return f"Error: Attachment '{attachment_name}' not found in pre-staged directory."
     return send_email(recipient, subject, body, final_attachment_path)
 
-@mcp.tool()
+@mcp.tool('fetch_recent_emails')
 def fetch_recent_emails(folder: str = "INBOX", limit: int = 10) -> str:
     """
     Fetch the most recent emails from a specified folder.
@@ -184,8 +196,13 @@ def fetch_recent_emails(folder: str = "INBOX", limit: int = 10) -> str:
 
 if __name__ == "__main__":
     try:
-        print("Starting MCP server 'gmail-mcp' on 127.0.0.1:5000")
-        mcp.run()
+        print("Starting MCP server 'gmail-mcp' on 0.0.0.0:8989")
+        print("Server is ready to accept HTTP connections")
+        print("Health check available at /health")
+        
+        # Start the MCP server
+        mcp.run(transport= "streamable-http")
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error starting server: {e}")
         time.sleep(5)
+        sys.exit(1)
